@@ -15,17 +15,48 @@ struct Cli {
 
 #[derive(Parser)]
 enum Commands {
-    Buckets {},
+    Bucket {
+        #[clap(short, long)]
+        action: String,
+    },
+    Object {
+        #[clap(short, long)]
+        action: String,
+        #[clap(short, long)]
+        bucket: String,
+    },
 }
 
 #[tokio::main]
 async fn main() {
     let args = Cli::parse();
-    let client = awscli::client().await.unwrap();
+    let client = s3cli::client().await.unwrap();
+    let region = s3cli::get_region().await.unwrap();
+    // Match on subcommand
     match args.command {
-        Some(Commands::Buckets {}) => {
-            awscli::list_buckets(&client).await.unwrap();
+        Some(Commands::Bucket { action }) => match action.as_str() {
+            "list" => {
+                s3cli::list_buckets(&client).await.unwrap();
+            }
+            "create" => {
+                s3cli::create_bucket(&client, "test-bucket", &region)
+                    .await
+                    .unwrap();
+            }
+            _ => {
+                println!("Invalid action");
+            }
+        },
+        Some(Commands::Object { action, bucket }) => match action.as_str() {
+            "list" => {
+                s3cli::list_objects(&client, &bucket).await.unwrap();
+            }
+            _ => {
+                println!("Invalid action");
+            }
+        },
+        None => {
+            println!("No subcommand was used");
         }
-        None => println!("No command specified"),
     }
 }
