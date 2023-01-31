@@ -63,7 +63,7 @@ pub async fn list_objects(client: &Client, bucket: &str) -> Result<(), Error> {
     let objects = resp.contents().unwrap_or_default();
     let num_objects = objects.len();
 
-    println!("Found {num_objects} in bucket {bucket}");
+    println!("Found {num_objects} objects in bucket {bucket}");
     println!();
     for object in objects {
         println!("{}", object.key().unwrap_or_default());

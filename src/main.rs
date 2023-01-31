@@ -19,9 +19,11 @@ enum Commands {
         #[clap(short, long)]
         action: String,
     },
-    Object {
+    List {
         #[clap(short, long)]
-        action: String,
+        bucket: String,
+    },
+    Upload {
         #[clap(short, long)]
         bucket: String,
         #[clap(short, long)]
@@ -48,20 +50,13 @@ async fn main() {
             _ => {
                 println!("Invalid action");
             }
-        },
-        Some(Commands::Object { action, bucket, filepath }) => match action.as_str() {
-            "list" => {
+        }
+        Some(Commands::List { bucket }) => {
                 s3cli::list_objects(&client, &bucket).await.unwrap();
             }
-            "upload" => {
-                s3cli::upload_object(&client, &bucket, &filepath)
-                    .await
-                    .unwrap();
+        Some(Commands::Upload { bucket, filepath }) => {
+                s3cli::upload_object(&client, &bucket, &filepath).await.unwrap();
             }
-            _ => {
-                println!("Invalid action");
-            }
-        },
         None => {
             println!("No subcommand was used");
         }

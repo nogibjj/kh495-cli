@@ -23,14 +23,14 @@ $ cargo run bucket --action list
 
 **List all objects in a specified S3 bucket**
 ```
-$ cargo run object --action list --bucket <bucket_name>
-# ex: cargo run object --action list --bucket kh495-ids721
+$ cargo run list --bucket <bucket_name>
+# ex: cargo run list --bucket kh495-ids721
 ```
 
 **Upload an object to an existing S3 bucket**
 ```
-$ cargo run object --action upload --bucket <bucket_name> --filepath <path_to_file>
-# ex: cargo run object --action upload --bucket kh495-ids721 --filepath ./test/text.jpg
+$ cargo run upload --bucket <bucket_name> --filepath <path_to_file>
+# ex: cargo run upload --bucket kh495-ids721 --filepath ./test/text.jpg
 ```
 
 ## Progress Log
