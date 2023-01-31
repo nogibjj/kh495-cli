@@ -8,15 +8,29 @@ The current [AWS CLI](https://github.com/aws/aws-cli/tree/v2) is written in Pyth
 * Use Github Codespaces and Copilot
 * Integrate the 'AWS SDK for Rust' into a Rust project
 
-## Useage
+## Setup
 
 1. Create an [AWS IAM User Policy for S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-iam-awsmanpol.html)
 
 2. Configure your [~/.aws/credentials file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-where)
 
-3. Run
+## Useage
+
+**List all S3 buckets**
 ```
-cargo run
+$ cargo run bucket --action list
+```
+
+**List all objects in a specified S3 bucket**
+```
+$ cargo run object --action list --bucket <bucket_name>
+# ex: cargo run object --action list --bucket kh495-ids721
+```
+
+**Upload an object to an existing S3 bucket**
+```
+$ cargo run object --action upload --bucket <bucket_name> --filepath <path_to_file>
+# ex: cargo run object --action upload --bucket kh495-ids721 --filepath ./test/text.jpg
 ```
 
 ## Progress Log
@@ -28,10 +42,14 @@ cargo run
 - [x] Establish basic AWS client connection to list S3 buckets
 
 **Week 2**
-- [ ] Add clap command line parsing for arguments (bucket name, local file name)
-- [ ] Bucket fxns: create, list
-- [ ] Object fxns: list objects in bucket, upload to existing bucket, upload to new bucket
-- [ ] Include: github release, containerization, benchmark, CI/CD
+- [x] Add clap command line parsing for arguments (bucket name, local file name)
+- [x] Bucket fxns: list
+- [x] Object fxns: list objects in bucket, upload to existing bucket
+
+**Week 3**
+- [ ] Bucket fxns: create
+- [ ] Object fxns: upload to new bucket
+- [ ] Include: unit tests, github release, containerization, benchmark, CI/CD
 
 
 ## References

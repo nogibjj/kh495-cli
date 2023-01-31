@@ -1,7 +1,11 @@
 // AWS S3 Configuration
 use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_s3::model::{BucketLocationConstraint, CreateBucketConfiguration};
+use aws_sdk_s3::types::ByteStream;
 use aws_sdk_s3::{Client, Error};
+use std::path::Path;
+use std::process;
+
 
 // Determine AWS region
 pub async fn get_region() -> Result<String, Error> {
@@ -63,6 +67,32 @@ pub async fn list_objects(client: &Client, bucket: &str) -> Result<(), Error> {
     println!();
     for object in objects {
         println!("{}", object.key().unwrap_or_default());
+    }
+
+    Ok(())
+}
+
+// Put object in bucket
+pub async fn upload_object(client: &Client, bucket: &str, filepath: &str) -> Result<(), Error> {
+    let body = ByteStream::from_path(Path::new(filepath)).await;
+    let key = Path::new(filepath).file_name().unwrap().to_str().unwrap();
+    
+    match body {
+        Ok(b) => {
+            let _resp = client
+                .put_object()
+                .bucket(bucket)
+                .key(key)
+                .body(b)
+                .send()
+                .await?;
+            println!("Uploaded {key} to {bucket}");
+        }
+        Err(e) => {
+            println!("Got an error uploading object:");
+            println!("{}", e);
+            process::exit(1);
+        }
     }
 
     Ok(())

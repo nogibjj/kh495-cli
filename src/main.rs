@@ -24,6 +24,8 @@ enum Commands {
         action: String,
         #[clap(short, long)]
         bucket: String,
+        #[clap(short, long)]
+        filepath: String
     },
 }
 
@@ -47,9 +49,14 @@ async fn main() {
                 println!("Invalid action");
             }
         },
-        Some(Commands::Object { action, bucket }) => match action.as_str() {
+        Some(Commands::Object { action, bucket, filepath }) => match action.as_str() {
             "list" => {
                 s3cli::list_objects(&client, &bucket).await.unwrap();
+            }
+            "upload" => {
+                s3cli::upload_object(&client, &bucket, &filepath)
+                    .await
+                    .unwrap();
             }
             _ => {
                 println!("Invalid action");
