@@ -15,11 +15,15 @@ struct Cli {
 
 #[derive(Parser)]
 enum Commands {
-    Bucket {
-        #[clap(short, long)]
-        action: String,
+    Buckets {
     },
-    List {
+    Create {
+        #[clap(short, long)]
+        bucket: String,
+        // #[clap(short, long)]
+        // region: String,
+    },
+    Objects {
         #[clap(short, long)]
         bucket: String,
     },
@@ -35,27 +39,22 @@ enum Commands {
 async fn main() {
     let args = Cli::parse();
     let client = s3cli::client().await.unwrap();
-    let region = s3cli::get_region().await.unwrap();
     // Match on subcommand
     match args.command {
-        Some(Commands::Bucket { action }) => match action.as_str() {
-            "list" => {
-                s3cli::list_buckets(&client).await.unwrap();
-            }
-            "create" => {
-                s3cli::create_bucket(&client, "test-bucket", &region)
-                    .await
-                    .unwrap();
-            }
-            _ => {
-                println!("Invalid action");
-            }
+        Some(Commands::Buckets { }) => {
+            s3cli::list_buckets(&client).await.unwrap();
         }
-        Some(Commands::List { bucket }) => {
-                s3cli::list_objects(&client, &bucket).await.unwrap();
+        Some(Commands::Create { bucket }) => {
+            let bucket_region = s3cli::bucket_region().await.unwrap();
+            s3cli::create_bucket(&client, &bucket, &bucket_region)
+                .await
+                .unwrap();
+        }
+        Some(Commands::Objects { bucket }) => {
+            s3cli::list_objects(&client, &bucket).await.unwrap();
             }
         Some(Commands::Upload { bucket, filepath }) => {
-                s3cli::upload_object(&client, &bucket, &filepath).await.unwrap();
+            s3cli::upload_object(&client, &bucket, &filepath).await.unwrap();
             }
         None => {
             println!("No subcommand was used");

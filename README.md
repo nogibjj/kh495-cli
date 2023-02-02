@@ -47,8 +47,8 @@ $ cargo run upload --bucket <bucket_name> --filepath <path_to_file>
 - [x] Object fxns: list objects in bucket, upload to existing bucket
 
 **Week 3**
-- [ ] Bucket fxns: create
-- [ ] Object fxns: upload to new bucket
+- [x] Bucket fxns: create
+- [x] Object fxns: upload to new bucket
 - [ ] Include: unit tests, github release, containerization, benchmark, CI/CD
 
 
