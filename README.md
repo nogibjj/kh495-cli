@@ -14,7 +14,7 @@ The current [AWS CLI](https://github.com/aws/aws-cli/tree/v2) is written in Pyth
 
 2. Configure your [~/.aws/credentials file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-where) with environment variables: `aws_access_key_id`, `aws_secret_access_key` and `region`
 
-## Useage
+## Run
 
 **List all S3 buckets**
 ```
