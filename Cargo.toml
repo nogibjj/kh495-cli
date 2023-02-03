@@ -10,3 +10,6 @@ aws-config = "0.52.0"
 aws-sdk-s3 = "0.22.0"
 tokio = { version = "1", features = ["full"] }
 clap = {version="4.0.32", features=["derive"]}
+
+[dev-dependencies]
+assert_cmd = "1"

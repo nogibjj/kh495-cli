@@ -15,15 +15,11 @@ struct Cli {
 
 #[derive(Parser)]
 enum Commands {
-    Buckets {
+    List {
+        #[clap(short, long)]
+        bucket: Option<String>,
     },
     Create {
-        #[clap(short, long)]
-        bucket: String,
-        // #[clap(short, long)]
-        // region: String,
-    },
-    Objects {
         #[clap(short, long)]
         bucket: String,
     },
@@ -33,6 +29,12 @@ enum Commands {
         #[clap(short, long)]
         filepath: String
     },
+    Delete {
+        #[clap(short, long)]
+        bucket: String,
+        #[clap(short, long)]
+        key: Option<String>
+    },
 }
 
 #[tokio::main]
@@ -41,21 +43,35 @@ async fn main() {
     let client = s3cli::client().await.unwrap();
     // Match on subcommand
     match args.command {
-        Some(Commands::Buckets { }) => {
-            s3cli::list_buckets(&client).await.unwrap();
-        }
         Some(Commands::Create { bucket }) => {
             let bucket_region = s3cli::bucket_region().await.unwrap();
             s3cli::create_bucket(&client, &bucket, &bucket_region)
                 .await
                 .unwrap();
         }
-        Some(Commands::Objects { bucket }) => {
-            s3cli::list_objects(&client, &bucket).await.unwrap();
+        Some(Commands::List { bucket }) => {
+            match bucket {
+                Some(bucket) => {
+                    s3cli::list_objects(&client, &bucket).await.unwrap();
+                }
+                None => {
+                    s3cli::list_buckets(&client).await.unwrap();
+                }
             }
+        }
         Some(Commands::Upload { bucket, filepath }) => {
             s3cli::upload_object(&client, &bucket, &filepath).await.unwrap();
             }
+        Some(Commands::Delete { bucket, key }) => {
+            match key {
+                Some(key) => {
+                    s3cli::delete_object(&client, &bucket, &key).await.unwrap();
+                }
+                None => {
+                    s3cli::delete_bucket(&client, &bucket).await.unwrap();
+                }
+            }
+        }
         None => {
             println!("No subcommand was used");
         }
