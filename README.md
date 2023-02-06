@@ -55,10 +55,15 @@ $ cargo run delete --bucket <bucket_name>
 # ex: cargo run delete --bucket ids721
 ```
 
-## CI/CD from Codespaces
+## CI/CD
+
+Github Actions configured in [.github/workflows/rust.yml](.github/workflows/rust.yml)
+
+**Build Executable**
 ```
 $ make release
 ```
+
 
 ## Progress Log
 
