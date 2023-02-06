@@ -90,7 +90,7 @@ pub async fn delete_bucket(client: &Client, bucket: &str) -> Result<(), Error> {
     if num_objects != 0 {
         println!("Bucket {bucket} is not empty. Cannot delete.");
         process::exit(1);
-    } 
+    }
     client.delete_bucket().bucket(bucket).send().await?;
     println!("Empty bucket {bucket} deleted.");
 
@@ -98,7 +98,7 @@ pub async fn delete_bucket(client: &Client, bucket: &str) -> Result<(), Error> {
 }
 
 /* -----------------------------
-    OBJECT FNXNS 
+    OBJECT FNXNS
 --------------------------------*/
 
 // List objects in bucket
@@ -116,7 +116,6 @@ pub async fn list_objects(client: &Client, bucket: &str) -> Result<(), Error> {
     let num_objects = objects.len();
 
     println!("Found {num_objects} objects in bucket {bucket}");
-    println!();
     for object in objects {
         println!("{}", object.key().unwrap_or_default());
     }
@@ -126,7 +125,6 @@ pub async fn list_objects(client: &Client, bucket: &str) -> Result<(), Error> {
 
 // Put object in bucket
 pub async fn upload_object(client: &Client, bucket: &str, filepath: &str) -> Result<(), Error> {
-    
     // if bucket doesn't exist, create it
     if !bucket_exists(client, bucket).await? {
         let bucket_region = bucket_region().await.unwrap();
@@ -164,7 +162,7 @@ pub async fn delete_object(client: &Client, bucket: &str, key: &str) -> Result<(
         println!("Bucket {bucket} does not exist.");
         process::exit(1);
     }
-    
+
     // Check key exists in bucket
     let resp = client.list_objects_v2().bucket(bucket).send().await?;
     let objects = resp.contents().unwrap_or_default();
@@ -185,7 +183,7 @@ pub async fn delete_object(client: &Client, bucket: &str, key: &str) -> Result<(
         .key(key)
         .send()
         .await?;
-    
+
     println!("Object {key} deleted from bucket {bucket}.");
 
     Ok(())

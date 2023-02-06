@@ -27,13 +27,13 @@ enum Commands {
         #[clap(short, long)]
         bucket: String,
         #[clap(short, long)]
-        filepath: String
+        filepath: String,
     },
     Delete {
         #[clap(short, long)]
         bucket: String,
         #[clap(short, long)]
-        key: Option<String>
+        key: Option<String>,
     },
 }
 
@@ -49,29 +49,27 @@ async fn main() {
                 .await
                 .unwrap();
         }
-        Some(Commands::List { bucket }) => {
-            match bucket {
-                Some(bucket) => {
-                    s3cli::list_objects(&client, &bucket).await.unwrap();
-                }
-                None => {
-                    s3cli::list_buckets(&client).await.unwrap();
-                }
+        Some(Commands::List { bucket }) => match bucket {
+            Some(bucket) => {
+                s3cli::list_objects(&client, &bucket).await.unwrap();
             }
-        }
+            None => {
+                s3cli::list_buckets(&client).await.unwrap();
+            }
+        },
         Some(Commands::Upload { bucket, filepath }) => {
-            s3cli::upload_object(&client, &bucket, &filepath).await.unwrap();
-            }
-        Some(Commands::Delete { bucket, key }) => {
-            match key {
-                Some(key) => {
-                    s3cli::delete_object(&client, &bucket, &key).await.unwrap();
-                }
-                None => {
-                    s3cli::delete_bucket(&client, &bucket).await.unwrap();
-                }
-            }
+            s3cli::upload_object(&client, &bucket, &filepath)
+                .await
+                .unwrap();
         }
+        Some(Commands::Delete { bucket, key }) => match key {
+            Some(key) => {
+                s3cli::delete_object(&client, &bucket, &key).await.unwrap();
+            }
+            None => {
+                s3cli::delete_bucket(&client, &bucket).await.unwrap();
+            }
+        },
         None => {
             println!("No subcommand was used");
         }

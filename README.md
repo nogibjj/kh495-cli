@@ -1,6 +1,8 @@
 # IDS721 Spring 2023 Project 1 - Rust CLI Tool
 
-The current [AWS CLI](https://github.com/aws/aws-cli/tree/v2) is written in Python. For this project I have built an AWS S3 CLI on Rust.
+The current [AWS CLI](https://github.com/aws/aws-cli/tree/v2) is written in Python. For this project I have built a mini AWS S3 CLI using Rust which supports CRUD operations for buckets and objects.
+
+![image](./assets/s3-cli.png)
 
 ## Project Goals/Outcomes
 
@@ -24,31 +26,38 @@ $ cargo run list
 **List all objects in a specified S3 bucket**
 ```
 $ cargo run list --bucket <bucket_name>
-# ex: cargo run list --bucket kh495-ids721
+# ex: cargo run list --bucket ids721
 ```
 
 **Create new S3 bucket**
 ```
 $ cargo run create --bucket <bucket_name>
-# ex: cargo run create --bucket kh495-ids721
+# ex: cargo run create --bucket ids721
 ```
 
-**Upload an object to an existing S3 bucket**
+**Upload an object to an S3 bucket**
+
+*NB: Will create bucket if DNE*
 ```
 $ cargo run upload --bucket <bucket_name> --filepath <path_to_file>
-# ex: cargo run upload --bucket kh495-ids721 --filepath ./test/test.jpg
+# ex: cargo run upload --bucket ids721 --filepath ./test/test.png
 ```
 
 **Delete an object from an S3 bucket**
 ```
 $ cargo run delete --bucket <bucket_name> --key <object_key>
-# ex: cargo run upload --bucket kh495-ids721 --key test.jpg
+# ex: cargo run delete --bucket ids721 --key test.png
 ```
 
 **Delete an empty S3 bucket**
 ```
 $ cargo run delete --bucket <bucket_name>
-# ex: cargo run upload --bucket kh495-ids721
+# ex: cargo run delete --bucket ids721
+```
+
+## CI/CD from Codespaces
+```
+$ make release
 ```
 
 ## Progress Log
@@ -60,8 +69,7 @@ $ cargo run delete --bucket <bucket_name>
 - [x] Add clap command line parsing for arguments (bucket name, local file name)
 - [x] Bucket fxns: list, create new, check if exists, delete if empty
 - [x] Object fxns: list objects in bucket, upload to existing bucket, upload to new bucket, delete
-- [ ] CI/CD, github release, containerization
-
+- [x] CI/CD with Github Actions
 
 ## References
 
