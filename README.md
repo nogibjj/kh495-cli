@@ -1,5 +1,7 @@
 # IDS721 Spring 2023 Project 1 - Rust CLI Tool
 
+### Now maintained at [https://github.com/athletedecoded/rust-s3-cli](https://github.com/athletedecoded/rust-s3-cli)
+
 The current [AWS CLI](https://github.com/aws/aws-cli/tree/v2) is written in Python. For this project I have built a mini AWS S3 CLI using Rust which supports CRUD operations for buckets and objects.
 
 ![image](./assets/s3-cli.png)
